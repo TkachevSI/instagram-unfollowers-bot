@@ -1,0 +1,24 @@
+name: Instagram Unfollowers Check
+on:
+  schedule:
+    - cron: '0 9 * * *'  # Запуск каждый день в 9:00 UTC (12:00 МСК)
+  workflow_dispatch:  # Ручной запуск
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install instagrapi python-telegram-bot python-dotenv
+      - name: Run script
+        env:
+          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+          INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: python main.py
